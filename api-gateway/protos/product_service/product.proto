@@ -1,0 +1,40 @@
+syntax="proto3";
+
+package product_service;
+option go_package="genproto/product_service";
+
+message Product {
+    string id = 1;
+    string name = 2;
+    int32 number_of_pages = 3;
+    string created_at = 4;
+    string updated_at = 5;
+}
+
+message CreateProductRequest {
+    string name = 1;
+    int32 number_of_pages = 2;
+}
+
+message ProductPrimaryKey {
+    string id = 1;
+}
+
+message GetProductsListRequest {
+    int32 page = 1;
+    int32 limit = 2;
+}
+
+message GetProductsListResponse {
+    repeated Product products = 1;
+    int32 count = 2;
+}
+
+message UpdateProductRequest {
+    Product product = 1;
+}
+
+message UpdateProductNameRequest {
+    string id = 1;
+    string name = 2;
+}

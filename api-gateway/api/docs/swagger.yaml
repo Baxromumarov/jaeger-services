@@ -1,0 +1,267 @@
+definitions:
+  company_service.Company:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      product_type:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  company_service.CreateCompanyRequest:
+    properties:
+      name:
+        type: string
+      product_type:
+        type: string
+    type: object
+  company_service.GetCompanysListResponse:
+    properties:
+      companys:
+        items:
+          $ref: '#/definitions/company_service.Company'
+        type: array
+      count:
+        type: integer
+    type: object
+  company_service.UpdateCompanyRequest:
+    properties:
+      company:
+        $ref: '#/definitions/company_service.Company'
+    type: object
+  http.Empty:
+    type: object
+  http.Response:
+    properties:
+      data: {}
+      description:
+        type: string
+      status:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: This is a api gateway
+  termsOfService: https://udevs.io
+  title: Swagger Example API
+  version: "1.0"
+paths:
+  /company:
+    get:
+      consumes:
+      - application/json
+      description: Get company list
+      parameters:
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: company
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/company_service.GetCompanysListResponse'
+              type: object
+        "400":
+          description: Invalid Argument
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Get company list
+      tags:
+      - company
+    post:
+      consumes:
+      - application/json
+      description: Create company
+      parameters:
+      - description: CreateCompanyRequest
+        in: body
+        name: region
+        required: true
+        schema:
+          $ref: '#/definitions/company_service.CreateCompanyRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: company
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/company_service.Company'
+              type: object
+        "400":
+          description: Invalid Argument
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Create company
+      tags:
+      - company
+    put:
+      consumes:
+      - application/json
+      description: Update company
+      operationId: update_company
+      parameters:
+      - description: Request body
+        in: body
+        name: Company
+        required: true
+        schema:
+          $ref: '#/definitions/company_service.UpdateCompanyRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/http.Empty'
+        "400":
+          description: Invalid Argument
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Update company
+      tags:
+      - company
+  /company/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete company by id
+      operationId: delete_company_by_id
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/http.Empty'
+        "400":
+          description: Invalid Argument
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Delete company by id
+      tags:
+      - company
+    get:
+      consumes:
+      - application/json
+      description: get company
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: company
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/company_service.Company'
+              type: object
+        "400":
+          description: Invalid Argument
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: get company
+      tags:
+      - company
+swagger: "2.0"

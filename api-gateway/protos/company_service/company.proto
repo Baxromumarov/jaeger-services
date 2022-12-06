@@ -1,0 +1,41 @@
+syntax="proto3";
+
+package company_service;
+option go_package="genproto/company_service";
+
+message Company {
+    string id = 1;
+    string name = 2;
+    string product_type = 3;
+    string created_at = 4;
+    string updated_at = 5;
+}
+
+message CreateCompanyRequest {
+    string name = 1;
+    string product_type = 2;
+}
+
+message CompanyPrimaryKey {
+    string id = 1;
+}
+
+message GetCompanysListRequest {
+    int32 page = 1;
+    int32 limit = 2;
+}
+
+message GetCompanysListResponse {
+    repeated Company companys = 1;
+    int32 count = 2;
+}
+
+message UpdateCompanyRequest {
+    Company company = 1;
+}
+
+message UpdateCompanyNameRequest {
+    string id = 1;
+    string name = 2;
+}
+

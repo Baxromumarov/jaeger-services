@@ -1,0 +1,15 @@
+syntax="proto3";
+
+package company_service;
+option go_package="genproto/company_service";
+
+import "company.proto";
+import "google/protobuf/empty.proto";
+
+service CompanyService {
+    rpc CreateCompany (CreateCompanyRequest) returns (Company);
+    rpc GetCompany (CompanyPrimaryKey) returns (Company);
+    rpc GetCompanysList (GetCompanysListRequest) returns (GetCompanysListResponse);
+    rpc UpdateCompany (UpdateCompanyRequest) returns (Company);
+    rpc DeleteCompany (CompanyPrimaryKey) returns (google.protobuf.Empty);
+}
