@@ -25,8 +25,8 @@ func NewProductRepo(db *Pool) storage.ProductRepoI {
 
 type Product struct {
 	Id          string
-	Name        string
-	ProductType string
+	CompanyId   string
+	ProductName string
 	CreatedAt   sql.NullString
 	UpdatedAt   sql.NullString
 }
@@ -35,10 +35,10 @@ func (b *productRepo) Create(ctx context.Context, req *product_service.CreatePro
 	dbSpan, ctx := opentracing.StartSpanFromContext(ctx, "storage.Create")
 	defer dbSpan.Finish()
 
-	query := `insert into company 
+	query := `insert into product 
 				(id, 
-				name, 
-				product_type
+				company_id,
+				name
 				) VALUES (
 					$1, 
 					$2, 
@@ -52,8 +52,8 @@ func (b *productRepo) Create(ctx context.Context, req *product_service.CreatePro
 
 	_, err = b.db.Exec(ctx, query,
 		uuid.String(),
-		req.Name,
-		// req.ProductType
+		req.CompanyId,
+		req.ProductName,
 	)
 
 	if err != nil {
@@ -77,16 +77,16 @@ func (b *productRepo) Get(ctx context.Context, req *product_service.ProductPrima
 	query := `select 
 		id, 
 		name, 
-		product_type,
+		company_id,
 		TO_CHAR(created_at, ` + config.DatabaseQueryTimeLayout + `) AS created_at,
 		TO_CHAR(updated_at, ` + config.DatabaseQueryTimeLayout + `) AS updated_at
-	from company 
+	from product 
 	where id = $1`
 
 	err = b.db.QueryRow(ctx, query, req.Id).Scan(
 		&result.Id,
-		&result.Name,
-		&result.ProductType,
+		&result.ProductName,
+		&result.CompanyId,
 		&result.CreatedAt,
 		&result.UpdatedAt,
 	)
@@ -104,8 +104,7 @@ func (b *productRepo) Get(ctx context.Context, req *product_service.ProductPrima
 	}
 
 	resp.Id = result.Id
-	resp.Name = result.Name
-	// resp.ProductType = result.ProductType
+	resp.Name = result.ProductName
 
 	return
 }
@@ -130,10 +129,10 @@ func (b *productRepo) GetList(ctx context.Context, req *product_service.GetProdu
 	query := `select 
 				id, 
 				name, 
-				product_type,
+				company_id,
 				created_at,
 				updated_at
-			from company`
+			from product`
 	filter = " WHERE true"
 	order = " ORDER BY created_at"
 	arrangement = " DESC"
@@ -151,7 +150,7 @@ func (b *productRepo) GetList(ctx context.Context, req *product_service.GetProdu
 		limit = " LIMIT @limit"
 	}
 
-	cQ := `SELECT count(1) FROM company` + filter
+	cQ := `SELECT count(1) FROM product` + filter
 
 	err = b.db.QueryRow(ctx, cQ, pgx.NamedArgs(params)).Scan(
 		&resp.Count,
@@ -170,13 +169,13 @@ func (b *productRepo) GetList(ctx context.Context, req *product_service.GetProdu
 	defer rows.Close()
 
 	for rows.Next() {
-		book := &product_service.Product{}
+		product := &product_service.Product{}
 		result := &Product{}
 
 		err = rows.Scan(
 			&result.Id,
-			&result.Name,
-			&result.ProductType,
+			&result.ProductName,
+			&result.CompanyId,
 			&result.CreatedAt,
 			&result.UpdatedAt,
 		)
@@ -186,18 +185,17 @@ func (b *productRepo) GetList(ctx context.Context, req *product_service.GetProdu
 		}
 
 		if result.CreatedAt.Valid {
-			book.CreatedAt = result.CreatedAt.String
+			product.CreatedAt = result.CreatedAt.String
 		}
 
 		if result.UpdatedAt.Valid {
-			book.UpdatedAt = result.UpdatedAt.String
+			product.UpdatedAt = result.UpdatedAt.String
 		}
 
-		book.Id = result.Id
-		book.Name = result.Name
-		// book.ProductType = result.ProductType
+		product.Id = result.Id
+		product.Name = result.ProductName
 
-		resp.Products = append(resp.Products, book)
+		resp.Products = append(resp.Products, product)
 	}
 
 	return
@@ -207,17 +205,15 @@ func (b *productRepo) Update(ctx context.Context, req *product_service.UpdatePro
 	dbSpan, ctx := opentracing.StartSpanFromContext(ctx, "storage.Update")
 	defer dbSpan.Finish()
 
-	query := `update company SET
+	query := `update product SET
 		name = @name,
-		product_type = @product_type,
 		updated_at = now()
 	WHERE
 		id = @id`
 
 	params := map[string]interface{}{
-		"id":           req.Product.Id,
-		"name":         req.Product.Name,
-		// "product_type": req.Company.ProductType,
+		"id":   req.Product.Id,
+		"name": req.Product.Name,
 	}
 
 	result, err := b.db.Exec(ctx, query, pgx.NamedArgs(params))
@@ -234,7 +230,7 @@ func (b *productRepo) Delete(ctx context.Context, req *product_service.ProductPr
 	dbSpan, ctx := opentracing.StartSpanFromContext(ctx, "storage.Delete")
 	defer dbSpan.Finish()
 
-	query := `delete from company where id = $1`
+	query := `delete from product where id = $1`
 
 	result, err := b.db.Exec(ctx, query, req.Id)
 	if err != nil {
@@ -244,4 +240,48 @@ func (b *productRepo) Delete(ctx context.Context, req *product_service.ProductPr
 	rowsAffected = result.RowsAffected()
 
 	return rowsAffected, err
+}
+
+func (b *productRepo) GetCompany(ctx context.Context, req *product_service.CompanyPrimaryKey) (resp *product_service.Product, err error) {
+	dbSpan, ctx := opentracing.StartSpanFromContext(ctx, "storage.Get")
+	defer dbSpan.Finish()
+
+	result := &Product{}
+	resp = &product_service.Product{}
+
+	query := `select 
+		id, 
+		name, 
+		company_id,
+		TO_CHAR(created_at, ` + config.DatabaseQueryTimeLayout + `) AS created_at,
+		TO_CHAR(updated_at, ` + config.DatabaseQueryTimeLayout + `) AS updated_at
+	from product 
+	where company_id = $1`
+
+	err = b.db.QueryRow(ctx, query, req.CompanyId).Scan(
+		&result.Id,
+		&result.ProductName,
+		&result.CompanyId,
+		&result.CreatedAt,
+		&result.UpdatedAt,
+	)
+
+	if err != nil {
+
+		return resp, err
+
+	}
+
+	if result.CreatedAt.Valid {
+		resp.CreatedAt = result.CreatedAt.String
+	}
+
+	if result.UpdatedAt.Valid {
+		resp.UpdatedAt = result.UpdatedAt.String
+	}
+
+	resp.Id = result.Id
+	resp.Name = result.ProductName
+
+	return
 }

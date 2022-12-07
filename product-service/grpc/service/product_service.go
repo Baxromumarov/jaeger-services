@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"jaeger-services/product-service/config"
+	"jaeger-services/product-service/genproto/company_service"
 	"jaeger-services/product-service/genproto/product_service"
 	"jaeger-services/product-service/grpc/client"
 	"jaeger-services/product-service/pkg/logger"
@@ -33,8 +34,15 @@ func NewProductService(cfg config.Config, log logger.LoggerI, strg storage.Stora
 func (b *ProductService) CreateProduct(ctx context.Context, req *product_service.CreateProductRequest) (resp *product_service.Product, err error) {
 	b.log.Info("---CreateProduct--->", logger.Any("req", req))
 
-	pKey, err := b.strg.Product().Create(ctx, req)
+	company, err := b.services.CompanyService().GetCompanyWithName(ctx, &company_service.CompanyName{Name: req.CompanyName})
+	if err != nil {
+		b.log.Error("!!!Getcompany with name--->", logger.Error(err))
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
 
+	req.CompanyId = company.Id
+
+	pKey, err := b.strg.Product().Create(ctx, req)
 	if err != nil {
 		b.log.Error("!!!CreateProduct--->", logger.Error(err))
 		return nil, status.Error(codes.InvalidArgument, err.Error())
@@ -106,6 +114,19 @@ func (b *ProductService) DeleteProduct(ctx context.Context, req *product_service
 
 	if rowsAffected <= 0 {
 		return nil, status.Error(codes.InvalidArgument, "no rows were affected")
+	}
+
+	return resp, err
+}
+
+func (b *ProductService) GetCompany(ctx context.Context, req *product_service.CompanyPrimaryKey) (resp *product_service.Product, err error) {
+	b.log.Info("---GetCompany--->", logger.Any("req", req))
+
+	resp, err = b.strg.Product().GetCompany(ctx, req)
+
+	if err != nil {
+		b.log.Error("!!!GetCompany--->", logger.Error(err))
+		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
 	return resp, err

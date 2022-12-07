@@ -6,14 +6,17 @@ option go_package="genproto/company_service";
 message Company {
     string id = 1;
     string name = 2;
-    string product_type = 3;
+    string product_name = 3;
     string created_at = 4;
     string updated_at = 5;
 }
 
+message CompanyName {
+    string name = 1;
+}
+
 message CreateCompanyRequest {
     string name = 1;
-    string product_type = 2;
 }
 
 message CompanyPrimaryKey {

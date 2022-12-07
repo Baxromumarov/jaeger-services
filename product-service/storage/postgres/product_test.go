@@ -14,7 +14,7 @@ func TestCreate(t *testing.T) {
 	productRepo := NewProductRepo(dbPool)
 
 	resp, err := productRepo.Create(context.Background(), &product_service.CreateProductRequest{
-		Name: "Test Company-name",
+		ProductName: "Test Product-name",
 		// ProductType: "test-types",
 	})
 

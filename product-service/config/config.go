@@ -31,6 +31,9 @@ type Config struct {
 	PostgresPassword string
 	PostgresDatabase string
 
+	CompanyServiceHost string
+	CompanyGRPCPort    string
+
 	PostgresMaxConnections int32
 
 	JaegerHostPort string
@@ -56,6 +59,9 @@ func Load() Config {
 	config.PostgresUser = cast.ToString(getOrReturnDefaultValue("POSTGRES_USER", "postgres"))
 	config.PostgresPassword = cast.ToString(getOrReturnDefaultValue("POSTGRES_PASSWORD", "postgres"))
 	config.PostgresDatabase = cast.ToString(getOrReturnDefaultValue("POSTGRES_DATABASE", "product_service"))
+
+	config.CompanyServiceHost = cast.ToString(getOrReturnDefaultValue("COMPANY_SERVICE_HOST", "0.0.0.0"))
+	config.CompanyGRPCPort = cast.ToString(getOrReturnDefaultValue("COMPANY_GRPC_PORT", ":8080"))
 
 	config.PostgresMaxConnections = cast.ToInt32(getOrReturnDefaultValue("POSTGRES_MAX_CONNECTIONS", 30))
 

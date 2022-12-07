@@ -9,6 +9,7 @@ import "google/protobuf/empty.proto";
 service ProductService {
     rpc CreateProduct (CreateProductRequest) returns (Product);
     rpc GetProduct (ProductPrimaryKey) returns (Product);
+    rpc GetCompany(CompanyPrimaryKey) returns (Product);
     rpc GetProductsList (GetProductsListRequest) returns (GetProductsListResponse);
     rpc UpdateProduct (UpdateProductRequest) returns (Product);
     rpc UpdateProductName (UpdateProductNameRequest) returns (Product);

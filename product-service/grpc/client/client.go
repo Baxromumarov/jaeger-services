@@ -2,33 +2,39 @@ package client
 
 import (
 	"jaeger-services/product-service/config"
-	"jaeger-services/product-service/genproto/product_service"
+	"jaeger-services/product-service/genproto/company_service"
 
+	otgrpc "github.com/opentracing-contrib/go-grpc"
+	"github.com/opentracing/opentracing-go"
 	"google.golang.org/grpc"
 )
 
 type ServiceManagerI interface {
-	ProductService() product_service.ProductServiceClient
+	CompanyService() company_service.CompanyServiceClient
 }
 
 type grpcClients struct {
-	productService product_service.ProductServiceClient
+	companyService company_service.CompanyServiceClient
 }
 
 func NewGrpcClients(cfg config.Config) (ServiceManagerI, error) {
-	connProductService, err := grpc.Dial(
-		cfg.ServiceHost+cfg.ServicePort,
+	connCompanyService, err := grpc.Dial(
+		cfg.CompanyServiceHost+cfg.CompanyGRPCPort,
 		grpc.WithInsecure(),
+		grpc.WithUnaryInterceptor(
+			otgrpc.OpenTracingClientInterceptor(opentracing.GlobalTracer())),
+		grpc.WithStreamInterceptor(
+			otgrpc.OpenTracingStreamClientInterceptor(opentracing.GlobalTracer())),
 	)
 	if err != nil {
 		return nil, err
 	}
 
 	return &grpcClients{
-		productService: product_service.NewProductServiceClient(connProductService),
+		companyService: company_service.NewCompanyServiceClient(connCompanyService),
 	}, nil
 }
 
-func (g *grpcClients) ProductService() product_service.ProductServiceClient {
-	return g.productService
+func (g *grpcClients) CompanyService() company_service.CompanyServiceClient {
+	return g.companyService
 }
