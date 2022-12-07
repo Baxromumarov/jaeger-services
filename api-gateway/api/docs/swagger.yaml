@@ -7,16 +7,12 @@ definitions:
         type: string
       name:
         type: string
-      product_type:
-        type: string
       updated_at:
         type: string
     type: object
   company_service.CreateCompanyRequest:
     properties:
       name:
-        type: string
-      product_type:
         type: string
     type: object
   company_service.GetCompanysListResponse:
@@ -42,6 +38,42 @@ definitions:
         type: string
       status:
         type: string
+    type: object
+  product_service.CreateProductRequest:
+    properties:
+      company_id:
+        type: string
+      company_name:
+        type: string
+      product_name:
+        type: string
+    type: object
+  product_service.GetProductsListResponse:
+    properties:
+      count:
+        type: integer
+      products:
+        items:
+          $ref: '#/definitions/product_service.Product'
+        type: array
+    type: object
+  product_service.Product:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      number_of_pages:
+        type: integer
+      updated_at:
+        type: string
+    type: object
+  product_service.UpdateProductRequest:
+    properties:
+      product:
+        $ref: '#/definitions/product_service.Product'
     type: object
 info:
   contact: {}
@@ -264,4 +296,218 @@ paths:
       summary: get company
       tags:
       - company
+  /product:
+    get:
+      consumes:
+      - application/json
+      description: Get product list
+      parameters:
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: product
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/product_service.GetProductsListResponse'
+              type: object
+        "400":
+          description: Invalid Argument
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Get product list
+      tags:
+      - product
+    post:
+      consumes:
+      - application/json
+      description: Create product
+      parameters:
+      - description: CreateProductRequest
+        in: body
+        name: region
+        required: true
+        schema:
+          $ref: '#/definitions/product_service.CreateProductRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: product
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/product_service.Product'
+              type: object
+        "400":
+          description: Invalid Argument
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Create product
+      tags:
+      - product
+    put:
+      consumes:
+      - application/json
+      description: Update product
+      operationId: update_product
+      parameters:
+      - description: Request body
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/product_service.UpdateProductRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/http.Empty'
+        "400":
+          description: Invalid Argument
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Update product
+      tags:
+      - product
+  /product/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete product by id
+      operationId: delete_product_by_id
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/http.Empty'
+        "400":
+          description: Invalid Argument
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Delete product by id
+      tags:
+      - product
+    get:
+      consumes:
+      - application/json
+      description: get product
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: product
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/product_service.Product'
+              type: object
+        "400":
+          description: Invalid Argument
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: get product
+      tags:
+      - product
 swagger: "2.0"

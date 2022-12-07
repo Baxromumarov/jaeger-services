@@ -12,10 +12,13 @@ message Product {
 }
 
 message CreateProductRequest {
-    string name = 1;
-    int32 number_of_pages = 2;
+    string product_name = 1;
+    string company_name = 2;
+    string company_id = 3;
 }
-
+message CompanyPrimaryKey{
+    string company_id = 1;
+}
 message ProductPrimaryKey {
     string id = 1;
 }

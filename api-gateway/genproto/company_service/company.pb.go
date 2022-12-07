@@ -27,7 +27,7 @@ type Company struct {
 
 	Id          string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	Name        string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	ProductType string `protobuf:"bytes,3,opt,name=product_type,json=productType,proto3" json:"product_type,omitempty"`
+	ProductName string `protobuf:"bytes,3,opt,name=product_name,json=productName,proto3" json:"product_name,omitempty"`
 	CreatedAt   string `protobuf:"bytes,4,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	UpdatedAt   string `protobuf:"bytes,5,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 }
@@ -78,9 +78,9 @@ func (x *Company) GetName() string {
 	return ""
 }
 
-func (x *Company) GetProductType() string {
+func (x *Company) GetProductName() string {
 	if x != nil {
-		return x.ProductType
+		return x.ProductName
 	}
 	return ""
 }
@@ -99,19 +99,65 @@ func (x *Company) GetUpdatedAt() string {
 	return ""
 }
 
+type CompanyName struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+}
+
+func (x *CompanyName) Reset() {
+	*x = CompanyName{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_company_proto_msgTypes[1]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CompanyName) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CompanyName) ProtoMessage() {}
+
+func (x *CompanyName) ProtoReflect() protoreflect.Message {
+	mi := &file_company_proto_msgTypes[1]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CompanyName.ProtoReflect.Descriptor instead.
+func (*CompanyName) Descriptor() ([]byte, []int) {
+	return file_company_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *CompanyName) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
 type CreateCompanyRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Name        string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	ProductType string `protobuf:"bytes,2,opt,name=product_type,json=productType,proto3" json:"product_type,omitempty"`
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 }
 
 func (x *CreateCompanyRequest) Reset() {
 	*x = CreateCompanyRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_company_proto_msgTypes[1]
+		mi := &file_company_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -124,7 +170,7 @@ func (x *CreateCompanyRequest) String() string {
 func (*CreateCompanyRequest) ProtoMessage() {}
 
 func (x *CreateCompanyRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_company_proto_msgTypes[1]
+	mi := &file_company_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -137,19 +183,12 @@ func (x *CreateCompanyRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateCompanyRequest.ProtoReflect.Descriptor instead.
 func (*CreateCompanyRequest) Descriptor() ([]byte, []int) {
-	return file_company_proto_rawDescGZIP(), []int{1}
+	return file_company_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *CreateCompanyRequest) GetName() string {
 	if x != nil {
 		return x.Name
-	}
-	return ""
-}
-
-func (x *CreateCompanyRequest) GetProductType() string {
-	if x != nil {
-		return x.ProductType
 	}
 	return ""
 }
@@ -165,7 +204,7 @@ type CompanyPrimaryKey struct {
 func (x *CompanyPrimaryKey) Reset() {
 	*x = CompanyPrimaryKey{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_company_proto_msgTypes[2]
+		mi := &file_company_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -178,7 +217,7 @@ func (x *CompanyPrimaryKey) String() string {
 func (*CompanyPrimaryKey) ProtoMessage() {}
 
 func (x *CompanyPrimaryKey) ProtoReflect() protoreflect.Message {
-	mi := &file_company_proto_msgTypes[2]
+	mi := &file_company_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -191,7 +230,7 @@ func (x *CompanyPrimaryKey) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CompanyPrimaryKey.ProtoReflect.Descriptor instead.
 func (*CompanyPrimaryKey) Descriptor() ([]byte, []int) {
-	return file_company_proto_rawDescGZIP(), []int{2}
+	return file_company_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *CompanyPrimaryKey) GetId() string {
@@ -213,7 +252,7 @@ type GetCompanysListRequest struct {
 func (x *GetCompanysListRequest) Reset() {
 	*x = GetCompanysListRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_company_proto_msgTypes[3]
+		mi := &file_company_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -226,7 +265,7 @@ func (x *GetCompanysListRequest) String() string {
 func (*GetCompanysListRequest) ProtoMessage() {}
 
 func (x *GetCompanysListRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_company_proto_msgTypes[3]
+	mi := &file_company_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -239,7 +278,7 @@ func (x *GetCompanysListRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCompanysListRequest.ProtoReflect.Descriptor instead.
 func (*GetCompanysListRequest) Descriptor() ([]byte, []int) {
-	return file_company_proto_rawDescGZIP(), []int{3}
+	return file_company_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *GetCompanysListRequest) GetPage() int32 {
@@ -268,7 +307,7 @@ type GetCompanysListResponse struct {
 func (x *GetCompanysListResponse) Reset() {
 	*x = GetCompanysListResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_company_proto_msgTypes[4]
+		mi := &file_company_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -281,7 +320,7 @@ func (x *GetCompanysListResponse) String() string {
 func (*GetCompanysListResponse) ProtoMessage() {}
 
 func (x *GetCompanysListResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_company_proto_msgTypes[4]
+	mi := &file_company_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -294,7 +333,7 @@ func (x *GetCompanysListResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCompanysListResponse.ProtoReflect.Descriptor instead.
 func (*GetCompanysListResponse) Descriptor() ([]byte, []int) {
-	return file_company_proto_rawDescGZIP(), []int{4}
+	return file_company_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *GetCompanysListResponse) GetCompanys() []*Company {
@@ -322,7 +361,7 @@ type UpdateCompanyRequest struct {
 func (x *UpdateCompanyRequest) Reset() {
 	*x = UpdateCompanyRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_company_proto_msgTypes[5]
+		mi := &file_company_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -335,7 +374,7 @@ func (x *UpdateCompanyRequest) String() string {
 func (*UpdateCompanyRequest) ProtoMessage() {}
 
 func (x *UpdateCompanyRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_company_proto_msgTypes[5]
+	mi := &file_company_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -348,7 +387,7 @@ func (x *UpdateCompanyRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateCompanyRequest.ProtoReflect.Descriptor instead.
 func (*UpdateCompanyRequest) Descriptor() ([]byte, []int) {
-	return file_company_proto_rawDescGZIP(), []int{5}
+	return file_company_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *UpdateCompanyRequest) GetCompany() *Company {
@@ -370,7 +409,7 @@ type UpdateCompanyNameRequest struct {
 func (x *UpdateCompanyNameRequest) Reset() {
 	*x = UpdateCompanyNameRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_company_proto_msgTypes[6]
+		mi := &file_company_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -383,7 +422,7 @@ func (x *UpdateCompanyNameRequest) String() string {
 func (*UpdateCompanyNameRequest) ProtoMessage() {}
 
 func (x *UpdateCompanyNameRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_company_proto_msgTypes[6]
+	mi := &file_company_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -396,7 +435,7 @@ func (x *UpdateCompanyNameRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateCompanyNameRequest.ProtoReflect.Descriptor instead.
 func (*UpdateCompanyNameRequest) Descriptor() ([]byte, []int) {
-	return file_company_proto_rawDescGZIP(), []int{6}
+	return file_company_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *UpdateCompanyNameRequest) GetId() string {
@@ -421,17 +460,17 @@ var file_company_proto_rawDesc = []byte{
 	0x22, 0x8e, 0x01, 0x0a, 0x07, 0x43, 0x6f, 0x6d, 0x70, 0x61, 0x6e, 0x79, 0x12, 0x0e, 0x0a, 0x02,
 	0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x12, 0x0a, 0x04,
 	0x6e, 0x61, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65,
-	0x12, 0x21, 0x0a, 0x0c, 0x70, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x5f, 0x74, 0x79, 0x70, 0x65,
-	0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x70, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x54,
-	0x79, 0x70, 0x65, 0x12, 0x1d, 0x0a, 0x0a, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x5f, 0x61,
+	0x12, 0x21, 0x0a, 0x0c, 0x70, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x5f, 0x6e, 0x61, 0x6d, 0x65,
+	0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x70, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x4e,
+	0x61, 0x6d, 0x65, 0x12, 0x1d, 0x0a, 0x0a, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x5f, 0x61,
 	0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64,
 	0x41, 0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x5f, 0x61, 0x74,
 	0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x75, 0x70, 0x64, 0x61, 0x74, 0x65, 0x64, 0x41,
-	0x74, 0x22, 0x4d, 0x0a, 0x14, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x43, 0x6f, 0x6d, 0x70, 0x61,
-	0x6e, 0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d,
-	0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x21, 0x0a,
-	0x0c, 0x70, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x18, 0x02, 0x20,
-	0x01, 0x28, 0x09, 0x52, 0x0b, 0x70, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x54, 0x79, 0x70, 0x65,
+	0x74, 0x22, 0x21, 0x0a, 0x0b, 0x43, 0x6f, 0x6d, 0x70, 0x61, 0x6e, 0x79, 0x4e, 0x61, 0x6d, 0x65,
+	0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04,
+	0x6e, 0x61, 0x6d, 0x65, 0x22, 0x2a, 0x0a, 0x14, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x43, 0x6f,
+	0x6d, 0x70, 0x61, 0x6e, 0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x12, 0x0a, 0x04,
+	0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65,
 	0x22, 0x23, 0x0a, 0x11, 0x43, 0x6f, 0x6d, 0x70, 0x61, 0x6e, 0x79, 0x50, 0x72, 0x69, 0x6d, 0x61,
 	0x72, 0x79, 0x4b, 0x65, 0x79, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28,
 	0x09, 0x52, 0x02, 0x69, 0x64, 0x22, 0x42, 0x0a, 0x16, 0x47, 0x65, 0x74, 0x43, 0x6f, 0x6d, 0x70,
@@ -470,15 +509,16 @@ func file_company_proto_rawDescGZIP() []byte {
 	return file_company_proto_rawDescData
 }
 
-var file_company_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
+var file_company_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_company_proto_goTypes = []interface{}{
 	(*Company)(nil),                  // 0: company_service.Company
-	(*CreateCompanyRequest)(nil),     // 1: company_service.CreateCompanyRequest
-	(*CompanyPrimaryKey)(nil),        // 2: company_service.CompanyPrimaryKey
-	(*GetCompanysListRequest)(nil),   // 3: company_service.GetCompanysListRequest
-	(*GetCompanysListResponse)(nil),  // 4: company_service.GetCompanysListResponse
-	(*UpdateCompanyRequest)(nil),     // 5: company_service.UpdateCompanyRequest
-	(*UpdateCompanyNameRequest)(nil), // 6: company_service.UpdateCompanyNameRequest
+	(*CompanyName)(nil),              // 1: company_service.CompanyName
+	(*CreateCompanyRequest)(nil),     // 2: company_service.CreateCompanyRequest
+	(*CompanyPrimaryKey)(nil),        // 3: company_service.CompanyPrimaryKey
+	(*GetCompanysListRequest)(nil),   // 4: company_service.GetCompanysListRequest
+	(*GetCompanysListResponse)(nil),  // 5: company_service.GetCompanysListResponse
+	(*UpdateCompanyRequest)(nil),     // 6: company_service.UpdateCompanyRequest
+	(*UpdateCompanyNameRequest)(nil), // 7: company_service.UpdateCompanyNameRequest
 }
 var file_company_proto_depIdxs = []int32{
 	0, // 0: company_service.GetCompanysListResponse.companys:type_name -> company_service.Company
@@ -509,7 +549,7 @@ func file_company_proto_init() {
 			}
 		}
 		file_company_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CreateCompanyRequest); i {
+			switch v := v.(*CompanyName); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -521,7 +561,7 @@ func file_company_proto_init() {
 			}
 		}
 		file_company_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CompanyPrimaryKey); i {
+			switch v := v.(*CreateCompanyRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -533,7 +573,7 @@ func file_company_proto_init() {
 			}
 		}
 		file_company_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetCompanysListRequest); i {
+			switch v := v.(*CompanyPrimaryKey); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -545,7 +585,7 @@ func file_company_proto_init() {
 			}
 		}
 		file_company_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetCompanysListResponse); i {
+			switch v := v.(*GetCompanysListRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -557,7 +597,7 @@ func file_company_proto_init() {
 			}
 		}
 		file_company_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UpdateCompanyRequest); i {
+			switch v := v.(*GetCompanysListResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -569,6 +609,18 @@ func file_company_proto_init() {
 			}
 		}
 		file_company_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*UpdateCompanyRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_company_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*UpdateCompanyNameRequest); i {
 			case 0:
 				return &v.state
@@ -587,7 +639,7 @@ func file_company_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_company_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   7,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

@@ -31,6 +31,9 @@ type Config struct {
 	CompanyServiceHost string
 	CompanyGRPCPort    string
 
+	ProductServiceHost string
+	ProductServicePort string
+
 	JaegerHostPort string
 }
 
@@ -54,6 +57,9 @@ func Load() Config {
 
 	config.CompanyServiceHost = cast.ToString(getOrReturnDefaultValue("COMPANY_SERVICE_HOST", "0.0.0.0"))
 	config.CompanyGRPCPort = cast.ToString(getOrReturnDefaultValue("COMPANY_GRPC_PORT", ":8080"))
+
+	config.ProductServiceHost = cast.ToString(getOrReturnDefaultValue("PRODUCT_SERVICE_HOST", "localhost"))
+	config.ProductServicePort = cast.ToString(getOrReturnDefaultValue("PRODUCT_SERVICE_PORT", ":9090"))
 
 	config.JaegerHostPort = cast.ToString(getOrReturnDefaultValue("JAEGER_HOST_PORT", "localhost:6831"))
 

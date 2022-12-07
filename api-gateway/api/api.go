@@ -39,6 +39,10 @@ func SetUpRouter(h handlers.Handler, cfg config.Config, tracer opentracing.Trace
 
 	// ! PRODUCT
 	r.POST("/product", h.CreateProduct)
+	r.GET("/product/:id", h.GetProduct)
+	r.GET("/product", h.GetProductList)
+	r.DELETE("/product/:id", h.DeleteProduct)
+	r.PUT("/product", h.UpdateProduct)
 
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
