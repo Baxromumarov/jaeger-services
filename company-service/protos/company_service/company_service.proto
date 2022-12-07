@@ -12,4 +12,5 @@ service CompanyService {
     rpc GetCompanysList (GetCompanysListRequest) returns (GetCompanysListResponse);
     rpc UpdateCompany (UpdateCompanyRequest) returns (Company);
     rpc DeleteCompany (CompanyPrimaryKey) returns (google.protobuf.Empty);
+    rpc GetCompanyWithName (CompanyName) returns (Company);
 }

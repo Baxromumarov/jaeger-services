@@ -25,6 +25,7 @@ const _ = grpc.SupportPackageIsVersion7
 type ProductServiceClient interface {
 	CreateProduct(ctx context.Context, in *CreateProductRequest, opts ...grpc.CallOption) (*Product, error)
 	GetProduct(ctx context.Context, in *ProductPrimaryKey, opts ...grpc.CallOption) (*Product, error)
+	GetCompany(ctx context.Context, in *CompanyPrimaryKey, opts ...grpc.CallOption) (*Product, error)
 	GetProductsList(ctx context.Context, in *GetProductsListRequest, opts ...grpc.CallOption) (*GetProductsListResponse, error)
 	UpdateProduct(ctx context.Context, in *UpdateProductRequest, opts ...grpc.CallOption) (*Product, error)
 	UpdateProductName(ctx context.Context, in *UpdateProductNameRequest, opts ...grpc.CallOption) (*Product, error)
@@ -51,6 +52,15 @@ func (c *productServiceClient) CreateProduct(ctx context.Context, in *CreateProd
 func (c *productServiceClient) GetProduct(ctx context.Context, in *ProductPrimaryKey, opts ...grpc.CallOption) (*Product, error) {
 	out := new(Product)
 	err := c.cc.Invoke(ctx, "/product_service.ProductService/GetProduct", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *productServiceClient) GetCompany(ctx context.Context, in *CompanyPrimaryKey, opts ...grpc.CallOption) (*Product, error) {
+	out := new(Product)
+	err := c.cc.Invoke(ctx, "/product_service.ProductService/GetCompany", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -99,6 +109,7 @@ func (c *productServiceClient) DeleteProduct(ctx context.Context, in *ProductPri
 type ProductServiceServer interface {
 	CreateProduct(context.Context, *CreateProductRequest) (*Product, error)
 	GetProduct(context.Context, *ProductPrimaryKey) (*Product, error)
+	GetCompany(context.Context, *CompanyPrimaryKey) (*Product, error)
 	GetProductsList(context.Context, *GetProductsListRequest) (*GetProductsListResponse, error)
 	UpdateProduct(context.Context, *UpdateProductRequest) (*Product, error)
 	UpdateProductName(context.Context, *UpdateProductNameRequest) (*Product, error)
@@ -115,6 +126,9 @@ func (UnimplementedProductServiceServer) CreateProduct(context.Context, *CreateP
 }
 func (UnimplementedProductServiceServer) GetProduct(context.Context, *ProductPrimaryKey) (*Product, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetProduct not implemented")
+}
+func (UnimplementedProductServiceServer) GetCompany(context.Context, *CompanyPrimaryKey) (*Product, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCompany not implemented")
 }
 func (UnimplementedProductServiceServer) GetProductsList(context.Context, *GetProductsListRequest) (*GetProductsListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetProductsList not implemented")
@@ -173,6 +187,24 @@ func _ProductService_GetProduct_Handler(srv interface{}, ctx context.Context, de
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ProductServiceServer).GetProduct(ctx, req.(*ProductPrimaryKey))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ProductService_GetCompany_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CompanyPrimaryKey)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).GetCompany(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/product_service.ProductService/GetCompany",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).GetCompany(ctx, req.(*CompanyPrimaryKey))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -263,6 +295,10 @@ var ProductService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetProduct",
 			Handler:    _ProductService_GetProduct_Handler,
+		},
+		{
+			MethodName: "GetCompany",
+			Handler:    _ProductService_GetCompany_Handler,
 		},
 		{
 			MethodName: "GetProductsList",

@@ -16,4 +16,5 @@ type CompanyRepoI interface {
 	GetList(ctx context.Context, req *company_service.GetCompanysListRequest) (resp *company_service.GetCompanysListResponse, err error)
 	Update(ctx context.Context, req *company_service.UpdateCompanyRequest) (rowsAffected int64, err error)
 	Delete(ctx context.Context, req *company_service.CompanyPrimaryKey) (rowsAffected int64, err error)
+	GetWithName(ctx context.Context, req *company_service.CompanyName) (resp *company_service.Company, err error)
 }

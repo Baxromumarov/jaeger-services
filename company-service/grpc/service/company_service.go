@@ -4,6 +4,7 @@ import (
 	"context"
 	"jaeger-services/company-service/config"
 	"jaeger-services/company-service/genproto/company_service"
+	"jaeger-services/company-service/genproto/product_service"
 	"jaeger-services/company-service/grpc/client"
 	"jaeger-services/company-service/pkg/logger"
 	"jaeger-services/company-service/storage"
@@ -60,10 +61,18 @@ func (b *CompanyService) GetCompanysList(ctx context.Context, req *company_servi
 	b.log.Info("---GetCompanysList--->", logger.Any("req", req))
 
 	resp, err = b.strg.Company().GetList(ctx, req)
-
 	if err != nil {
 		b.log.Error("!!!GetCompanysList--->", logger.Error(err))
 		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	for i, item := range resp.Companys {
+		product, err := b.services.ProductService().GetCompany(ctx, &product_service.CompanyPrimaryKey{CompanyId: item.Id})
+		if err != nil {
+			b.log.Error("!!!GetCompany product with company id--->", logger.Error(err))
+			return nil, status.Error(codes.InvalidArgument, err.Error())
+		}
+		resp.Companys[i].ProductName = product.Name
 	}
 
 	return resp, err
@@ -92,8 +101,6 @@ func (b *CompanyService) UpdateCompany(ctx context.Context, req *company_service
 	return resp, err
 }
 
-
-
 func (b *CompanyService) DeleteCompany(ctx context.Context, req *company_service.CompanyPrimaryKey) (resp *empty.Empty, err error) {
 	b.log.Info("---DeleteCompany--->", logger.Any("req", req))
 
@@ -108,6 +115,19 @@ func (b *CompanyService) DeleteCompany(ctx context.Context, req *company_service
 
 	if rowsAffected <= 0 {
 		return nil, status.Error(codes.InvalidArgument, "no rows were affected")
+	}
+
+	return resp, err
+}
+
+func (b *CompanyService) GetCompanyWithName(ctx context.Context, req *company_service.CompanyName) (resp *company_service.Company, err error) {
+	b.log.Info("---GetCompany--->", logger.Any("req", req))
+
+	resp, err = b.strg.Company().GetWithName(ctx, req)
+
+	if err != nil {
+		b.log.Error("!!!GetCompany--->", logger.Error(err))
+		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
 
 	return resp, err

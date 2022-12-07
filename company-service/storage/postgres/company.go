@@ -24,11 +24,10 @@ func NewCompanyRepo(db *Pool) storage.CompanyRepoI {
 }
 
 type Company struct {
-	Id          string
-	Name        string
-	ProductType string
-	CreatedAt   sql.NullString
-	UpdatedAt   sql.NullString
+	Id        string
+	Name      string
+	CreatedAt sql.NullString
+	UpdatedAt sql.NullString
 }
 
 func (b *companyRepo) Create(ctx context.Context, req *company_service.CreateCompanyRequest) (resp *company_service.CompanyPrimaryKey, err error) {
@@ -37,12 +36,10 @@ func (b *companyRepo) Create(ctx context.Context, req *company_service.CreateCom
 
 	query := `insert into company 
 				(id, 
-				name, 
-				product_type
+				name
 				) VALUES (
 					$1, 
-					$2, 
-					$3
+					$2
 				)`
 
 	uuid, err := uuid.NewRandom()
@@ -53,7 +50,7 @@ func (b *companyRepo) Create(ctx context.Context, req *company_service.CreateCom
 	_, err = b.db.Exec(ctx, query,
 		uuid.String(),
 		req.Name,
-		req.ProductType)
+	)
 
 	if err != nil {
 		return resp, err
@@ -76,7 +73,6 @@ func (b *companyRepo) Get(ctx context.Context, req *company_service.CompanyPrima
 	query := `select 
 		id, 
 		name, 
-		product_type,
 		TO_CHAR(created_at, ` + config.DatabaseQueryTimeLayout + `) AS created_at,
 		TO_CHAR(updated_at, ` + config.DatabaseQueryTimeLayout + `) AS updated_at
 	from company 
@@ -85,7 +81,6 @@ func (b *companyRepo) Get(ctx context.Context, req *company_service.CompanyPrima
 	err = b.db.QueryRow(ctx, query, req.Id).Scan(
 		&result.Id,
 		&result.Name,
-		&result.ProductType,
 		&result.CreatedAt,
 		&result.UpdatedAt,
 	)
@@ -104,7 +99,6 @@ func (b *companyRepo) Get(ctx context.Context, req *company_service.CompanyPrima
 
 	resp.Id = result.Id
 	resp.Name = result.Name
-	resp.ProductType = result.ProductType
 
 	return
 }
@@ -129,7 +123,6 @@ func (b *companyRepo) GetList(ctx context.Context, req *company_service.GetCompa
 	query := `select 
 				id, 
 				name, 
-				product_type,
 				created_at,
 				updated_at
 			from company`
@@ -175,7 +168,6 @@ func (b *companyRepo) GetList(ctx context.Context, req *company_service.GetCompa
 		err = rows.Scan(
 			&result.Id,
 			&result.Name,
-			&result.ProductType,
 			&result.CreatedAt,
 			&result.UpdatedAt,
 		)
@@ -194,7 +186,6 @@ func (b *companyRepo) GetList(ctx context.Context, req *company_service.GetCompa
 
 		book.Id = result.Id
 		book.Name = result.Name
-		book.ProductType = result.ProductType
 
 		resp.Companys = append(resp.Companys, book)
 	}
@@ -208,15 +199,13 @@ func (b *companyRepo) Update(ctx context.Context, req *company_service.UpdateCom
 
 	query := `update company SET
 		name = @name,
-		product_type = @product_type,
 		updated_at = now()
 	WHERE
 		id = @id`
 
 	params := map[string]interface{}{
-		"id":           req.Company.Id,
-		"name":         req.Company.Name,
-		"product_type": req.Company.ProductType,
+		"id":   req.Company.Id,
+		"name": req.Company.Name,
 	}
 
 	result, err := b.db.Exec(ctx, query, pgx.NamedArgs(params))
@@ -228,7 +217,6 @@ func (b *companyRepo) Update(ctx context.Context, req *company_service.UpdateCom
 
 	return rowsAffected, err
 }
-
 
 func (b *companyRepo) Delete(ctx context.Context, req *company_service.CompanyPrimaryKey) (rowsAffected int64, err error) {
 	dbSpan, ctx := opentracing.StartSpanFromContext(ctx, "storage.Delete")
@@ -244,4 +232,44 @@ func (b *companyRepo) Delete(ctx context.Context, req *company_service.CompanyPr
 	rowsAffected = result.RowsAffected()
 
 	return rowsAffected, err
+}
+
+func (b *companyRepo) GetWithName(ctx context.Context, req *company_service.CompanyName) (resp *company_service.Company, err error) {
+	dbSpan, ctx := opentracing.StartSpanFromContext(ctx, "storage.Get")
+	defer dbSpan.Finish()
+
+	result := &Company{}
+	resp = &company_service.Company{}
+
+	query := `select 
+		id, 
+		name, 
+		TO_CHAR(created_at, ` + config.DatabaseQueryTimeLayout + `) AS created_at,
+		TO_CHAR(updated_at, ` + config.DatabaseQueryTimeLayout + `) AS updated_at
+	from company 
+	where name = $1`
+
+	err = b.db.QueryRow(ctx, query, req.Name).Scan(
+		&result.Id,
+		&result.Name,
+		&result.CreatedAt,
+		&result.UpdatedAt,
+	)
+
+	if err != nil {
+		return resp, err
+	}
+
+	if result.CreatedAt.Valid {
+		resp.CreatedAt = result.CreatedAt.String
+	}
+
+	if result.UpdatedAt.Valid {
+		resp.UpdatedAt = result.UpdatedAt.String
+	}
+
+	resp.Id = result.Id
+	resp.Name = result.Name
+
+	return
 }

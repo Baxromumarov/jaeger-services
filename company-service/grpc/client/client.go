@@ -1,7 +1,6 @@
 package client
 
 import (
-	"fmt"
 	"jaeger-services/company-service/config"
 	"jaeger-services/company-service/genproto/company_service"
 	"jaeger-services/company-service/genproto/product_service"
@@ -17,7 +16,6 @@ type ServiceManagerI interface {
 type grpcClients struct {
 	companyService company_service.CompanyServiceClient
 	productService product_service.ProductServiceClient
-
 }
 
 func NewGrpcClients(cfg config.Config) (ServiceManagerI, error) {
@@ -30,11 +28,10 @@ func NewGrpcClients(cfg config.Config) (ServiceManagerI, error) {
 	}
 
 	connProductService, err := grpc.Dial(
-		cfg.ProductServiceHost+cfg.ProductServiceHost,
+		cfg.ProductServiceHost+cfg.ProductServicePort,
 		grpc.WithInsecure(),
 	)
 	if err != nil {
-		fmt.Println("here")
 		return nil, err
 	}
 	return &grpcClients{

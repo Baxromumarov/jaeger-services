@@ -32,7 +32,7 @@ type Config struct {
 	PostgresDatabase string
 
 	ProductServiceHost string
-	ProductServicePort int
+	ProductServicePort string
 
 	PostgresMaxConnections int32
 
@@ -61,7 +61,7 @@ func Load() Config {
 	config.PostgresDatabase = cast.ToString(getOrReturnDefaultValue("POSTGRES_DATABASE", "company_service"))
 
 	config.ProductServiceHost = cast.ToString(getOrReturnDefaultValue("PRODUCT_SERVICE_HOST", "localhost"))
-	config.ProductServicePort = cast.ToInt(getOrReturnDefaultValue("PRODUCT_SERVICE_PORT", 9090))
+	config.ProductServicePort = cast.ToString(getOrReturnDefaultValue("PRODUCT_SERVICE_PORT", ":9090"))
 
 	config.PostgresMaxConnections = cast.ToInt32(getOrReturnDefaultValue("POSTGRES_MAX_CONNECTIONS", 30))
 

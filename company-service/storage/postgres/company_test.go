@@ -14,8 +14,7 @@ func TestCreate(t *testing.T) {
 	companyRepo := NewCompanyRepo(dbPool)
 
 	resp, err := companyRepo.Create(context.Background(), &company_service.CreateCompanyRequest{
-		Name:        "Test Company-name",
-		ProductType: "test-types",
+		Name: "Test Company-name",
 	})
 
 	assert.NoError(t, err)
@@ -62,9 +61,8 @@ func TestUpdate(t *testing.T) {
 
 	resp, err := companyRepo.Update(context.Background(), &company_service.UpdateCompanyRequest{
 		Company: &company_service.Company{
-			Id:          "e58ae4cb-a98a-4750-b0aa-11e867d76593",
-			Name:        "Test Update",
-			ProductType: "test-type",
+			Id:   "e58ae4cb-a98a-4750-b0aa-11e867d76593",
+			Name: "Test Update",
 		},
 	})
 

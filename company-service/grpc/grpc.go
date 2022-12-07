@@ -3,7 +3,6 @@ package grpc
 import (
 	"jaeger-services/company-service/config"
 	"jaeger-services/company-service/genproto/company_service"
-	"jaeger-services/company-service/genproto/product_service"
 	"jaeger-services/company-service/grpc/client"
 	"jaeger-services/company-service/grpc/service"
 	"jaeger-services/company-service/pkg/logger"
@@ -24,10 +23,7 @@ func SetUpServer(cfg config.Config, log logger.LoggerI, strg storage.StorageI, s
 	)
 
 	company_service.RegisterCompanyServiceServer(grpcServer, service.NewCompanyService(cfg, log, strg, svcs))
-	product_service.RegisterProductServiceServer(grpcServer, service.NewProductService(cfg, log, strg, svcs))
-
 
 	reflection.Register(grpcServer)
 	return
 }
-
