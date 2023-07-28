@@ -3,7 +3,7 @@ name: gateway
 on: 
   push: 
     branches:
-      - master
+      - main
     
 jobs:
   gateway:
