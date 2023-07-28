@@ -19,12 +19,6 @@ import (
 // @Failure 500 {object} http.Response{data=string} "Server Error"
 func (h *Handler) CreateCompany(c *gin.Context) {
 	var company company_service.CreateCompanyRequest
-	err := c.ShouldBindJSON(&company)
-
-	if err != nil {
-		h.handleResponse(c, http.BadRequest, err.Error())
-		return
-	}
 
 	resp, err := h.services.CompanyService().CreateCompany(
 		c.Request.Context(),
@@ -187,4 +181,3 @@ func (h *Handler) UpdateCompany(c *gin.Context) {
 
 	h.handleResponse(c, http.OK, resp)
 }
-

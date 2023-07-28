@@ -1,0 +1,13 @@
+name: gateway
+
+on: 
+  push: 
+    branches:
+      - master
+    
+jobs:
+  gateway:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: gateway
+        run: echo "api gateway"

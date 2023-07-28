@@ -13,9 +13,9 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-// @title Swagger Example API
+// SetUpRouter @title Swagger Example API
 // SetUpRouter godoc
-// @description This is a api gateway
+// @description This is an api gateway
 // @termsOfService https://udevs.io
 // @version 1.0
 func SetUpRouter(h handlers.Handler, cfg config.Config, tracer opentracing.Tracer) (r *gin.Engine) {
