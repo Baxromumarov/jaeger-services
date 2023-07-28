@@ -1,5 +1,6 @@
 package client
 
+
 import (
 	"jaeger-services/api-gateway/config"
 	"jaeger-services/api-gateway/genproto/company_service"
