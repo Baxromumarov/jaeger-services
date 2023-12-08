@@ -14,16 +14,13 @@ update-proto-module:
 
 copy-proto-module:
 	rm -rf ${CURRENT_DIR}/protos
-	rsync -rv --exclude={'/.git','LICENSE','README.md'} ${CURRENT_DIR}/pb_protos/* ${CURRENT_DIR}/protos
+	rsync -rv --exclude=.git ${CURRENT_DIR}/epa_protos/* ${CURRENT_DIR}/protos
 
 gen-proto-module:
 	./scripts/gen_proto.sh ${CURRENT_DIR}
 
-migration-up:
-	migrate -path ./migrations/postgres -database 'postgres://postgres:1234@0.0.0.0:5432/api_gateway?sslmode=disable' up
-
-migration-down:
-	migrate -path ./migrations/postgres -database 'postgres://postgres:1234@0.0.0.0:5432/api_gateway?sslmode=disable' down
+rm-proto-omit-empty:
+	chmod 744 ./scripts/rm_omit_empty.sh && ./scripts/rm_omit_empty.sh ${CURRENT_DIR}
 
 build:
 	CGO_ENABLED=0 GOOS=linux go build -mod=vendor -a -installsuffix cgo -o ${CURRENT_DIR}/bin/${APP} ${APP_CMD_DIR}/main.go
@@ -36,8 +33,17 @@ push-image:
 	docker push ${REGISTRY}/${PROJECT_NAME}/${APP}:${TAG}
 	docker push ${REGISTRY}/${PROJECT_NAME}/${APP}:${ENV_TAG}
 
+clear-image:
+	docker rmi ${REGISTRY}/${PROJECT_NAME}/${APP}:${TAG}
+	docker rmi ${REGISTRY}/${PROJECT_NAME}/${APP}:${ENV_TAG}
+
 swag-init:
 	swag init -g api/api.go -o api/docs
-
 run:
 	go run cmd/main.go
+
+linter:
+	golangci-lint run
+
+clear:
+	rm -rf ${CURRENT_DIR}/bin/*

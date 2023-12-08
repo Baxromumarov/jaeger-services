@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"jaeger-services/api-gateway/api/http"
 	"jaeger-services/api-gateway/genproto/product_service"
 
@@ -20,8 +21,8 @@ import (
 func (h *Handler) CreateProduct(c *gin.Context) {
 	var product product_service.CreateProductRequest
 	err := c.ShouldBindJSON(&product)
-
 	if err != nil {
+		fmt.Println("here>>>>>>>>>>>>qweqwewq>>>", err)
 		h.handleResponse(c, http.BadRequest, err.Error())
 		return
 	}
@@ -32,10 +33,12 @@ func (h *Handler) CreateProduct(c *gin.Context) {
 	)
 
 	if err != nil {
+		fmt.Println("here>>>>>>>>>>>>>>>", err)
+
 		h.handleResponse(c, http.GRPCError, err.Error())
 		return
 	}
-
+	fmt.Println("here>>>>sadads>>>>>>>>>>>", err)
 	h.handleResponse(c, http.OK, resp)
 }
 

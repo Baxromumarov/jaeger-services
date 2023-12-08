@@ -32,7 +32,7 @@ type Config struct {
 	CompanyGRPCPort    string
 
 	ProductServiceHost string
-	ProductServicePort string
+	ProductGRPCPort string
 
 	JaegerHostPort string
 }
@@ -49,7 +49,7 @@ func Load() Config {
 	config.Environment = cast.ToString(getOrReturnDefaultValue("ENVIRONMENT", DebugMode))
 	config.Version = cast.ToString(getOrReturnDefaultValue("VERSION", "1.0"))
 
-	config.HTTPPort = cast.ToString(getOrReturnDefaultValue("HTTP_PORT", ":9081"))
+	config.HTTPPort = cast.ToString(getOrReturnDefaultValue("HTTP_PORT", ":9080"))
 	config.HTTPScheme = cast.ToString(getOrReturnDefaultValue("HTTP_SCHEME", "http"))
 
 	config.DefaultOffset = cast.ToString(getOrReturnDefaultValue("DEFAULT_OFFSET", "0"))
@@ -59,7 +59,7 @@ func Load() Config {
 	config.CompanyGRPCPort = cast.ToString(getOrReturnDefaultValue("COMPANY_GRPC_PORT", ":8080"))
 
 	config.ProductServiceHost = cast.ToString(getOrReturnDefaultValue("PRODUCT_SERVICE_HOST", "localhost"))
-	config.ProductServicePort = cast.ToString(getOrReturnDefaultValue("PRODUCT_SERVICE_PORT", ":9090"))
+	config.ProductGRPCPort = cast.ToString(getOrReturnDefaultValue("PRODUCT_GRPC_PORT", ":9090"))
 
 	config.JaegerHostPort = cast.ToString(getOrReturnDefaultValue("JAEGER_HOST_PORT", "localhost:6831"))
 

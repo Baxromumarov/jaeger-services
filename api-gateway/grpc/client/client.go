@@ -35,7 +35,7 @@ func NewGrpcClients(cfg config.Config) (ServiceManagerI, error) {
 	}
 
 	connProductService, err := grpc.Dial(
-		cfg.ProductServiceHost+cfg.ProductServicePort,
+		cfg.ProductServiceHost+cfg.ProductGRPCPort,
 		grpc.WithInsecure(),
 		grpc.WithUnaryInterceptor(
 			otgrpc.OpenTracingClientInterceptor(opentracing.GlobalTracer())),

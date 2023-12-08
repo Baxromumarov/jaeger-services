@@ -16,6 +16,7 @@ import (
 )
 
 func main() {
+	fmt.Println("Ishladi")
 	cfg := config.Load()
 
 	jaegerCfg := &jaeger_config.Configuration{
@@ -60,6 +61,7 @@ func main() {
 
 	svcs, err := client.NewGrpcClients(cfg)
 	if err != nil {
+		fmt.Println("here>>>>>>>>>>>>>>>",err)
 		log.Panic("client.NewGrpcClients", logger.Error(err))
 	}
 
